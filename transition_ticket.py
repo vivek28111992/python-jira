@@ -13,7 +13,7 @@ projects = jira.projects()
 ticketName = str(input("Enter the ticket name: "))
 issue = jira.issue(ticketName)
 
-command = str(input("Enter option for following task: \n 1. Get a story into current sprint \n 2. Move Story \n 3. Update Story Points \n 4. Read Story's Description & comments \n 5. Add work log to specific ticket \n 6. Assign Ticket To Me \n "))
+command = str(input("Enter option for following task: \n 1. Get a story into current sprint \n 2. Move Story \n 3. Update Story Points \n 4. Read Story's Description & comments \n 5. Add work log to specific ticket \n 6. Assign Ticket To Me \n 7. Create sub-task of this issue \n"))
 
 if command == "1":
     boards = jira.boards()
@@ -37,19 +37,21 @@ elif command == "2":
     # print(issue.id)
 
     transitions = jira.transitions(issue)
-    ticketStatus = str(input("What you want to do with it: \n 1. Inprogress \n 2. Resolve \n"))
+    print([(t['id'], t['name']) for t in transitions])
+    print(issue.fields.status)
+    ticketStatus = str(input("What you want to do with this issue: \n 1. Inprogress \n 2. Resolve \n 3. Reopen Issue \n"))
     
     if ticketStatus != "1" and ticketStatus != "2":
         print("Please enter proper status")
     else:
-        # print([(t['id'], t['name']) for t in transitions])
-        # print(issue.fields.status)
         if ticketStatus == "1":
             jira.transition_issue(issue, '4')
         elif ticketStatus == "2":
             jira.transition_issue(issue, '5')
+        elif ticketStatus == "3":
+            jira.transition_issue(issue, '3')
         else:
-            print("Please select option either 1 or 2")
+            print("Please select option either 1, 2 or 3")
 
 
     # issues = jira.search_issues('project=PP')
@@ -75,5 +77,17 @@ elif command == "5":
     jira.add_worklog(issue, timeSpent=timeSpent, timeSpentSeconds=None, adjustEstimate=None, newEstimate=None, reduceBy=None, comment=None, started=None, user=None)
 elif command == "6":
     jira.assign_issue(issue.id, username)
+elif command == "7":
+    summary = str(input("Please enter summary: "))
+    description = str(input("Plese enter description: "))
+
+    rootnn_dict = {
+    'summary' : summary,
+    'description' : description,
+    'issuetype' : { 'name' : 'Sub-task' },
+    'parent' : { 'id' : issue.id},
+    }
+
+    jira.create_issue(fields=rootnn_dict)
 else:
     print("Invalid input")
