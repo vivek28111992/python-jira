@@ -1,5 +1,5 @@
 from jira.client import JIRA
-from credentials import username, password
+from credentials import username, password, board_id
 
 options = {'server': 'https://jira.b2xcare.com'}
 
@@ -13,12 +13,11 @@ projects = jira.projects()
 ticketName = str(input("Enter the ticket name: "))
 issue = jira.issue(ticketName)
 
-command = str(input("Enter option for following task: \n 1. Get a story into current sprint \n 2. Move Story \n 3. Update Story Points \n 4. Read Story's Description & comments \n 5. Add work log to specific ticket \n 6. Assign Ticket To Me \n 7. Create sub-task of this issue \n"))
+command = str(input("Enter option for following task: \n 1. Get a story into current sprint \n 2. Move Story \n 3. Update Story Points \n 4. Read Story's Description & comments \n 5. Add work log to specific ticket \n 6. Assign Ticket To Me \n 7. Create sub-task of this ticket \n"))
 
 if command == "1":
     boards = jira.boards()
     # print('boards ', boards)
-    board_id = 220
     sprints = jira.sprints(board_id)
     # for sprint in sprints:
     #     print('%s: %s ' % (sprint.id, sprint.name))
@@ -39,7 +38,7 @@ elif command == "2":
     transitions = jira.transitions(issue)
     print([(t['id'], t['name']) for t in transitions])
     print(issue.fields.status)
-    ticketStatus = str(input("What you want to do with this issue: \n 1. Inprogress \n 2. Resolve \n 3. Reopen Issue \n"))
+    ticketStatus = str(input("What you want to do with this ticket: \n 1. Inprogress \n 2. Resolve \n 3. Reopen Issue \n"))
     
     if ticketStatus != "1" and ticketStatus != "2":
         print("Please enter proper status")
