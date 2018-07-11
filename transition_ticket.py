@@ -36,6 +36,10 @@ while executionFlag:
         storyPoints = int(input("Enter story points: "))
         issue.update(fields={'customfield_10021': storyPoints})         # --> Story Points
         issue.update(fields={'customfield_10904': {'id': "11568"}})     # --> Team 4 Id
+    
+        userResponse = str(input("Enter (Y/y) to continue: "))
+        if userResponse.lower() != "y":
+            executionFlag = False
     elif command == "2":
         transitions = jira.transitions(issue)
         # print([(t['id'], t['name']) for t in transitions])
@@ -58,6 +62,10 @@ while executionFlag:
         #
         # for issue in issues:
         #     print (issue.key, 'Status: ',issue.fields.status)
+
+        userResponse = str(input("Enter (Y/y) to continue: "))
+        if userResponse.lower() != "y":
+            executionFlag = False
     elif command == "3":
         # for field_name in issue.raw['fields']:
         #     print("Field:", field_name, "Value:", issue.raw['fields'][field_name])
@@ -65,18 +73,34 @@ while executionFlag:
         storyPoints = int(input("Enter story points: "))
         # print(storyPoints)
         issue.update(fields={'customfield_10021': storyPoints})
+    
+        userResponse = str(input("Enter (Y/y) to continue: "))
+        if userResponse.lower() != "y":
+            executionFlag = False
     elif command == "4":
-        print("========================================================================")
+        print("\n")
         print("Description ")
+        print("=================================================")
         print(issue.raw['fields']['description'])
-        print("========================================================================")
+        print("\n")
         print("Comments ")
+        print("=================================================")
         print(issue.fields.comment.comments)
+        userResponse = str(input("Enter (Y/y) to continue: "))
+        if userResponse.lower() != "y":
+            executionFlag = False
     elif command == "5":
         timeSpent = str(input("Please enter the time you want to log (eg. 3w 4d 12h 30m): "))
         jira.add_worklog(issue, timeSpent=timeSpent, timeSpentSeconds=None, adjustEstimate=None, newEstimate=None, reduceBy=None, comment=None, started=None, user=None)
+        userResponse = str(input("Enter (Y/y) to continue: "))
+        if userResponse.lower() != "y":
+            executionFlag = False
     elif command == "6":
         jira.assign_issue(issue.id, username)
+
+        userResponse = str(input("Enter (Y/y) to continue: "))
+        if userResponse.lower() != "y":
+            executionFlag = False
     elif command == "7":
         # print(issue.fields.project.key)
         summary = str(input("Please enter summary: "))
@@ -93,6 +117,10 @@ while executionFlag:
         }
 
         jira.create_issue(fields=subTaskDict)
+
+        userResponse = str(input("Enter (Y/y) to continue: "))
+        if userResponse.lower() != "y":
+            executionFlag = False
     else:
         print("Invalid input")
         userResponse = str(input("Enter (Y/y) to continue: \n"))
